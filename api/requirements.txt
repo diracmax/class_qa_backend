@@ -4,3 +4,6 @@ mysql-connector-python
 Werkzeug
 starlette==0.17.1
 pydantic
+python-jose[cryptography]
+passlib[bcrypt]
+python-multipart
