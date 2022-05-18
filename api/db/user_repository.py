@@ -11,7 +11,6 @@ class UserRepository(UserRepositoryInterface):
         # DBクライアントを作成する
         cursor = self.conn.cursor()
 
-        # memo_idで検索を実行する
         query = "SELECT * FROM USERS WHERE name = %s"
         cursor.execute(query, [username])
         result: tuple = cursor.fetchone()
@@ -27,6 +26,9 @@ class UserRepository(UserRepositoryInterface):
     def save(self, username: str, password: str):
         cursor = self.conn.cursor()
 
+        if self.exist(username):
+            return False
+
         from library.certification import get_password_hash
         hashed_password = get_password_hash(password)
 
@@ -39,4 +41,6 @@ class UserRepository(UserRepositoryInterface):
         return True
 
     def exist(self, username: str) -> bool:
-        pass
+        if self.get(username) is None:
+            return False
+        return True

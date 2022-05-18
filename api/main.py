@@ -19,9 +19,11 @@ from db.user_repository import UserRepository
 from db.class_repository import ClassRepository
 from db.question_repository import QuestionRepository
 from fastapi.encoders import jsonable_encoder
+from starlette.responses import Response
 
 import os
 from dotenv import load_dotenv
+
 load_dotenv()
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
@@ -107,10 +109,10 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
 
 @app.post("/users")
 def create_user(user: RequestUser):
-    UserRepository(conn).save(user.username, user.password)
-    return JSONResponse(
-        content={"Hello": "Taro"}
-    )
+    is_saved = UserRepository(conn).save(user.username, user.password)
+    if not is_saved:
+        return Response(status_code=400)
+    return Response(status_code=201)
 
 
 @app.get("/classes")
@@ -144,6 +146,25 @@ def get_questions(class_id: int):
             }
             for question_object in response_data
         ]
+    )
+
+
+class RequestQuestion(BaseModel):
+    content: str
+
+
+@app.post("/test/{classId}")
+def post_question(
+                  classId: int,
+                  requestQuestion: RequestQuestion,
+                  token: str = Depends(oauth2_scheme)
+                  ):
+    return JSONResponse(
+        content={
+            "token": token,
+            "classId": classId,
+            "content": requestQuestion.content
+        }
     )
 
 
