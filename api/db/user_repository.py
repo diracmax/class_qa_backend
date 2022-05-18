@@ -1,5 +1,6 @@
 from interface.repository_interface import UserRepositoryInterface
 from data.user_data import UserData
+from werkzeug.exceptions import NotFound
 
 
 class UserRepository(UserRepositoryInterface):
@@ -17,6 +18,9 @@ class UserRepository(UserRepositoryInterface):
 
         # DBクライアントをcloseする
         cursor.close()
+
+        if result is None:
+            return None
 
         return UserData(id=result[0], name=result[1], hashed_password=result[2])
 
