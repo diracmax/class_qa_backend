@@ -8,7 +8,7 @@ XX' | jq .
 ```
 
 ```shell
-curl -X POST -H "Content-Type: application/json" -d '{"username":"太郎", "password":"gain"}' http://localhost:80/users
+curl -X POST -H "Content-Type: application/json" -d '{"username":"太郎", "password":"gain"}' http://localhost:80/usersgit 
 ```
 
 ```shell
