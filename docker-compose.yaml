@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  mysql:
+    container_name: mysql
+    build: ./db
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: db
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      TZ: 'Asia/Tokyo'
+      LANG: 'ja_JP.UTF-8'
+    tty: true
+    restart: always
+    user: root
+    volumes:
+      - ./db/init:/docker-entrypoint-initdb.d
+      - ./db/data:/data
+      - ./db/my.cnf:/etc/mysql/conf.d/my.cnf
+    healthcheck:
+      test: "/etc/init.d/mysql status"
+      interval: 1s
+      retries: 120
+  app:
+    container_name: api
+    build: ./api
+    tty: true
+    volumes:
+      - ./api:/code
+    ports:
+      - "80:80"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    command: python3 main.py
