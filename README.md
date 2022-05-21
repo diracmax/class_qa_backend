@@ -12,5 +12,5 @@ curl -X POST -H "Content-Type: application/json" -d '{"username":"太郎", "pass
 ```
 
 ```shell
-curl -X POST 'http://localhost:80/classes/1/questions' -H "Content-Type: application/json" -d '{"content":"aiu"}' -H 'Authorization: Bearer $2b$12$UMtdnZRtsE1mDFLfLgr7I.Mege/VlHpr1tAySaVNPfwAxB9bSfD9q'
+curl -X POST 'http://localhost:80/classes/1/questions' -H "Content-Type: application/json" -d '{"content":"aiu"}' -H 'Authorization: Bearer XXXX'
 ```
